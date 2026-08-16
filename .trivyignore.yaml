@@ -1,0 +1,10 @@
+vulnerabilities:
+  - id: GHSA-6v7p-g79w-8964
+    paths:
+      - "**/msgpack-1.1.2.dist-info/METADATA"
+    statement: "Trivy false positive: actual installed msgpack version is 1.2.1."
+
+  - id: CVE-2025-47273
+    paths:
+      - "**/setuptools-70.3.0.dist-info/METADATA"
+    statement: "Trivy false positive: actual installed setuptools version is 84.0.0."
