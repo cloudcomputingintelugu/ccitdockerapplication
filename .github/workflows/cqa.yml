@@ -34,10 +34,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4. Run tests
+      # 4. Run tests and generate coverage report
       - name: Run Unit Tests
         run: |
-          PYTHONPATH=. pytest -v
+          PYTHONPATH=. pytest -v --cov=. --cov-report=xml
 
       # 5. SonarQube Scan
       - name: SonarQube Scan
@@ -46,7 +46,81 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # 6. SonarQube Quality Gate
+      # 6. Generate CQA summary in GitHub
+      - name: Generate SonarQube CQA Summary
+        shell: bash
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ccitproject
+        run: |
+          echo "Fetching SonarQube metrics..."
+
+          RESPONSE=$(curl -sS \
+            -u "${SONAR_TOKEN}:" \
+            "${SONAR_HOST_URL}/api/measures/component?component=${SONAR_PROJECT_KEY}&metricKeys=alert_status,bugs,vulnerabilities,security_hotspots,code_smells,coverage,duplicated_lines_density")
+
+          echo "$RESPONSE" > sonar-response.json
+
+          python - <<'PY'
+          import json
+          import os
+
+          with open("sonar-response.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          measures = {}
+
+          for measure in data.get("component", {}).get("measures", []):
+              measures[measure["metric"]] = measure.get("value", "N/A")
+
+          quality_gate = measures.get("alert_status", "N/A")
+          bugs = measures.get("bugs", "0")
+          vulnerabilities = measures.get("vulnerabilities", "0")
+          security_hotspots = measures.get("security_hotspots", "0")
+          code_smells = measures.get("code_smells", "0")
+          coverage = measures.get("coverage", "0")
+          duplications = measures.get("duplicated_lines_density", "0")
+
+          if quality_gate == "OK":
+              gate_display = "✅ PASSED"
+          elif quality_gate == "ERROR":
+              gate_display = "❌ FAILED"
+          else:
+              gate_display = f"⚠️ {quality_gate}"
+
+          sonar_url = (
+              f"{os.environ['SONAR_HOST_URL']}/dashboard?id="
+              f"{os.environ['SONAR_PROJECT_KEY']}"
+          )
+
+          summary = f"""## 🔍 SonarQube CQA Report
+
+          | Metric | Result |
+          |---|---:|
+          | Quality Gate | {gate_display} |
+          | Bugs | {bugs} |
+          | Vulnerabilities | {vulnerabilities} |
+          | Security Hotspots | {security_hotspots} |
+          | Code Smells | {code_smells} |
+          | Coverage | {coverage}% |
+          | Duplications | {duplications}% |
+
+          ### SonarQube
+          [View full SonarQube analysis]({sonar_url})
+          """
+
+          with open(
+              os.environ["GITHUB_STEP_SUMMARY"],
+              "a",
+              encoding="utf-8"
+          ) as f:
+              f.write(summary)
+
+          print("CQA summary added to GitHub Actions.")
+          PY
+
+      # 7. SonarQube Quality Gate
       - name: SonarQube Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
