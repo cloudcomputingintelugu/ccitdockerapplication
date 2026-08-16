@@ -11,7 +11,7 @@ on:
 
 jobs:
   docker:
-    name: Build Scan and Push Docker Image
+    name: Build Scan and Push Docker Image to hub
     runs-on: ubuntu-latest
 
     steps:
