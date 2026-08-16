@@ -1,20 +1,21 @@
 FROM python:3.12-slim
+
 WORKDIR /app
 
-# Copy runtime dependencies only
-COPY requirements_docker.txt .
+COPY requirements.txt .
 
-# Upgrade vulnerable packaging components
-RUN python -m pip install --no-cache-dir --upgrade \
-    pip \
-    "setuptools>=78.1.1" \
-    "wheel>=0.46.2" \
-    "msgpack>=1.2.1"
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir "msgpack>=1.2.1"
 
-# Install application dependencies
-RUN pip install --no-cache-dir -r requirements_docker.txt
+# Verify the actual installed versions
+RUN python - <<'PY'
+from importlib.metadata import version
 
-# Copy application
+for package in ["msgpack", "setuptools", "wheel"]:
+    print(f"{package}=={version(package)}")
+PY
+
 COPY app.py .
 
 EXPOSE 5000
