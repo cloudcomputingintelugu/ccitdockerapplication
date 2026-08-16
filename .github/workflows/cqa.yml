@@ -37,7 +37,7 @@ jobs:
       # 4. Run tests
       - name: Run Unit Tests
         run: |
-          pytest -v
+          PYTHONPATH=. pytest -v
 
       # 5. SonarQube Scan
       - name: SonarQube Scan
