@@ -1,17 +1,13 @@
 name: Docker CI Pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - master
-    types:
-      - opened
-      - synchronize
-      - reopened
 
 jobs:
   docker:
-    name: Build Scan and Push Docker Image to hub
+    name: Build Scan and Push Docker Image to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +31,7 @@ jobs:
       - name: Set Docker Image
         run: |
           echo "IMAGE_NAME=cloudintelugu/githubrepos" >> "$GITHUB_ENV"
-          echo "IMAGE_TAG=pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}" >> "$GITHUB_ENV"
+          echo "IMAGE_TAG=build-${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
 
       # 5. Build Docker image
       - name: Build Docker Image
@@ -74,7 +70,7 @@ jobs:
 
           echo "| Item | Result |" >> "$GITHUB_STEP_SUMMARY"
           echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Pull Request | #${{ github.event.pull_request.number }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Branch | master |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Docker Image | \`${IMAGE_NAME}:${IMAGE_TAG}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Docker Build | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Trivy Scan | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
