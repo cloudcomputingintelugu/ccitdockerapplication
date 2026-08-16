@@ -1,0 +1,81 @@
+name: Docker CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  docker:
+    name: Build Scan and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Checkout source code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Setup Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 4. Define Docker image name and tag
+      - name: Set Docker Image
+        run: |
+          echo "IMAGE_NAME=cloudintelugu/githubrepos" >> "$GITHUB_ENV"
+          echo "IMAGE_TAG=pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}" >> "$GITHUB_ENV"
+
+      # 5. Build Docker image
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t "${IMAGE_NAME}:${IMAGE_TAG}" \
+            .
+
+      # 6. Display image
+      - name: Display Docker Image
+        run: |
+          echo "Docker Image:"
+          echo "${IMAGE_NAME}:${IMAGE_TAG}"
+
+      # 7. Trivy vulnerability scan
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}'
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      # 8. Push Docker image to Docker Hub
+      - name: Push Docker Image
+        run: |
+          docker push "${IMAGE_NAME}:${IMAGE_TAG}"
+
+      # 9. GitHub Actions summary
+      - name: Docker CI Summary
+        run: |
+          echo "## 🐳 Docker CI Pipeline" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| Item | Result |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Pull Request | #${{ github.event.pull_request.number }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Docker Image | \`${IMAGE_NAME}:${IMAGE_TAG}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Docker Build | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Trivy Scan | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Docker Push | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
