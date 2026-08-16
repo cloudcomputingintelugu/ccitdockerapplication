@@ -4,14 +4,12 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-# Upgrade packaging tools and vulnerable dependencies
-RUN python -m pip install --upgrade \
+RUN python -m pip install --no-cache-dir --upgrade \
     pip \
-    setuptools \
-    wheel \
-    jaraco.context
+    "setuptools>=78.1.1" \
+    "wheel>=0.46.2" \
+    "jaraco.context>=6.1.0"
 
-# Install application dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
