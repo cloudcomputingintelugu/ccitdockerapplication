@@ -3,7 +3,7 @@ FROM python:3.11-slim-bookworm
 WORKDIR /app
 
 # Copy runtime dependencies only
-COPY requirements.txt .
+COPY requirements_docker.txt .
 
 # Upgrade vulnerable packaging components
 RUN python -m pip install --no-cache-dir --upgrade \
