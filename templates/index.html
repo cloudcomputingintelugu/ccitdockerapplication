@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CCIT DevOps Platform</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header>
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ☁
+            </div>
+
+            CCIT DevOps
+
+        </div>
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            Application Online
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                Kubernetes Deployment
+            </div>
+
+            <h1>
+                Cloud Computing in Telugu
+            </h1>
+
+            <p>
+                Welcome to the CCIT Kubernetes Demo3 application.
+                This application is deployed using Docker,
+                Kubernetes and Argo CD GitOps.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="container">
+
+
+        <!-- SERVICE CARDS -->
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    ☸️
+                </div>
+
+                <h3>
+                    Kubernetes
+                </h3>
+
+                <p>
+                    Application is running inside a Kubernetes
+                    cluster with multiple replicas for
+                    high availability.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🚀
+                </div>
+
+                <h3>
+                    Argo CD
+                </h3>
+
+                <p>
+                    Continuous deployment is managed through
+                    GitOps using Argo CD.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🐳
+                </div>
+
+                <h3>
+                    Docker
+                </h3>
+
+                <p>
+                    The application is packaged as a Docker
+                    container and stored in Docker Hub.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- APPLICATION INFORMATION -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                Application Information
+            </h2>
+
+
+            <div class="info-grid">
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Application
+                    </div>
+
+                    <div class="info-value">
+                        CCIT - Demo3
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Platform
+                    </div>
+
+                    <div class="info-value">
+                        Kubernetes
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Deployment
+                    </div>
+
+                    <div class="info-value">
+                        Argo CD GitOps
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Container Port
+                    </div>
+
+                    <div class="info-value">
+                        5000
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- DEPLOYMENT PIPELINE -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                Deployment Pipeline
+            </h2>
+
+
+            <div class="pipeline">
+
+
+                <div class="pipeline-step">
+
+                    <div class="pipeline-icon">
+                        📦
+                    </div>
+
+                    <strong>
+                        GitHub
+                    </strong>
+
+                    <span>
+                        Source Code
+                    </span>
+
+                </div>
+
+
+                <div class="arrow">
+                    →
+                </div>
+
+
+                <div class="pipeline-step">
+
+                    <div class="pipeline-icon">
+                        🔨
+                    </div>
+
+                    <strong>
+                        GitHub Actions
+                    </strong>
+
+                    <span>
+                        Build &amp; Push
+                    </span>
+
+                </div>
+
+
+                <div class="arrow">
+                    →
+                </div>
+
+
+                <div class="pipeline-step">
+
+                    <div class="pipeline-icon">
+                        🐳
+                    </div>
+
+                    <strong>
+                        Docker Hub
+                    </strong>
+
+                    <span>
+                        Container Image
+                    </span>
+
+                </div>
+
+
+                <div class="arrow">
+                    →
+                </div>
+
+
+                <div class="pipeline-step">
+
+                    <div class="pipeline-icon">
+                        ☸️
+                    </div>
+
+                    <strong>
+                        Kubernetes
+                    </strong>
+
+                    <span>
+                        Application
+                    </span>
+
+                </div>
+
+
+                <div class="arrow">
+                    →
+                </div>
+
+
+                <div class="pipeline-step">
+
+                    <div class="pipeline-icon">
+                        🔄
+                    </div>
+
+                    <strong>
+                        Argo CD
+                    </strong>
+
+                    <span>
+                        GitOps Sync
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <strong>
+            Cloud Computing in Telugu
+        </strong>
+
+        &nbsp; | &nbsp;
+
+        Kubernetes Demo
+
+        <br><br>
+
+        Built with Flask • Docker • Kubernetes • Argo CD by CCIT
+
+    </footer>
+
+
+</body>
+</html>
