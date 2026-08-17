@@ -786,7 +786,7 @@ def home():
 
             <br><br>
 
-            Built with Flask • Docker • Kubernetes • Argo CD
+            Built with Flask • Docker • Kubernetes • Argo CD by CCIT
 
         </footer>
 
