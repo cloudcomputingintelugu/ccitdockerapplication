@@ -17,7 +17,7 @@ def test_home_status_code(client):
 def test_home_page_contains_title(client):
     response = client.get("/")
 
-    assert b"CCIT DevOps Platform" in response.data
+    assert b"CCIT DevOps Platform-Cloud computing" in response.data
 
 
 def test_home_page_contains_application_name(client):
