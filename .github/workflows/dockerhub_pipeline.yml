@@ -66,12 +66,12 @@ jobs:
             --ignorefile .trivyignore.yaml \
             "${IMAGE_NAME}:${IMAGE_TAG}"
 
-      # 8. Push Docker image to Docker Hub
+      # 9. Push Docker image to Docker Hub
       - name: Push Docker Image
         run: |
           docker push "${IMAGE_NAME}:${IMAGE_TAG}"
 
-      # 9. GitHub Actions summary
+      # 10. GitHub Actions summary
       - name: Docker CI Summary
         run: |
           echo "## 🐳 Docker CI Pipeline" >> "$GITHUB_STEP_SUMMARY"
