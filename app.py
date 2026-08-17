@@ -797,6 +797,7 @@ def home():
     """
 
 PASSWORD= "123456"
+PASSWORD= "1234567"
 
 if __name__ == "__main__":
     app.run(
