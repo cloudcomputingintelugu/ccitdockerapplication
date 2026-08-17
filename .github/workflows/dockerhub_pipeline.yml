@@ -71,7 +71,22 @@ jobs:
         run: |
           docker push "${IMAGE_NAME}:${IMAGE_TAG}"
 
-      # 10. GitHub Actions summary
+      # 10. Save exact image information
+      - name: Save Image Information
+        run: |
+          echo "${IMAGE_NAME}:${IMAGE_TAG}" > image-tag.txt
+
+          echo "Image information:"
+          cat image-tag.txt
+
+      # 11. Upload image tag artifact
+      - name: Upload Image Tag
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-tag
+          path: image-tag.txt
+
+      # 12. GitHub Actions summary
       - name: Docker CI Summary
         run: |
           echo "## 🐳 Docker CI Pipeline" >> "$GITHUB_STEP_SUMMARY"
@@ -84,3 +99,4 @@ jobs:
           echo "| Docker Build | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Trivy Scan | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Docker Push | ✅ PASSED |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Image Artifact | ✅ UPLOADED |" >> "$GITHUB_STEP_SUMMARY"
